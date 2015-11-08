@@ -24,8 +24,8 @@ import gr.uop.intermittent.faults.utils.CacheStore;
  */
 public class TestClass {
 
-    private static int count = 0;
-    private static int count2 = 0;
+    private int count = 0;
+    private int count2 = 0;
     
     private final static Object countlock = new Object();
     private final static Object count2lock = new Object();

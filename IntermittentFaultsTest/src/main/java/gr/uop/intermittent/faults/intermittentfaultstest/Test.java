@@ -16,8 +16,14 @@
  */
 package gr.uop.intermittent.faults.intermittentfaultstest;
 
+import gr.uop.intermittent.faults.utils.Cache;
 import gr.uop.intermittent.faults.utils.CacheApi;
 import gr.uop.intermittent.faults.utils.CacheCollection;
+import org.jboss.metrics.javase.automatedmetricsjavaseapi.MetricsCacheApi;
+import org.jboss.metrics.javase.automatedmetricsjavaseapi.MetricsPropertiesApi;
+import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCache;
+import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCacheCollection;
+import org.jboss.metrics.jbossautomatedmetricsproperties.MetricProperties;
 
 /**
  *
@@ -25,13 +31,15 @@ import gr.uop.intermittent.faults.utils.CacheCollection;
  */
 public class Test {
 
-    private static String groupName = "myTestGroup";
-    
+    private static String groupName = "intermittentFaultsGroup";
+    private static String groupName2 = "myTestGroup";
     /**
      * @param args the command line arguments
      */
+    
     public static void main(String[] args) {
         try {
+            initializeMetricProperties();
             TestClass mTC = new TestClass();
             TestThreads mTreads =  new TestThreads("1",mTC);
             mTreads.start();
@@ -44,12 +52,51 @@ public class Test {
             
             while (mTreads.getT().isAlive() || mTreads2.getT().isAlive() || mTreads3.getT().isAlive());
             
-            if (CacheCollection.getCacheCollection().getCacheInstance(groupName)!=null)
-                System.out.println(CacheApi.printCache(groupName));
+            if (CacheCollection.getCacheCollection().getCacheInstance(groupName2)!=null)
+                System.out.println(CacheApi.printCache(groupName2));
+            
+            if (MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(groupName)!=null)
+                System.out.println(MetricsCacheApi.printMetricsCache(groupName));
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    
+    
+    public static MetricsCache test(String[] args) {
+        try {
+            initializeMetricProperties();
+            TestClass mTC = new TestClass();
+            TestThreads mTreads =  new TestThreads("1",mTC);
+            mTreads.start();
+         
+            TestThreads mTreads2 =  new TestThreads("2",mTC);
+            mTreads2.start();
+            
+            TestThreads mTreads3 =  new TestThreads("3",mTC);
+            mTreads3.start();
+            
+            while (mTreads.getT().isAlive() || mTreads2.getT().isAlive() || mTreads3.getT().isAlive());
+            
+        //    if (MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(groupName2)!=null)
+        //        System.out.println(MetricsCacheApi.printMetricsCache(groupName2));
+            
+         //   if (MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(groupName)!=null)
+         //       System.out.println(MetricsCacheApi.printMetricsCache(groupName));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(groupName);
+    }
+    
+    private static void initializeMetricProperties() {
+        MetricProperties metricProperties = new MetricProperties();
+        metricProperties.setCacheStore("true");
+        MetricsPropertiesApi.storeProperties(groupName, metricProperties);
+        MetricsPropertiesApi.storeProperties(groupName2, metricProperties);
     }
     
 }

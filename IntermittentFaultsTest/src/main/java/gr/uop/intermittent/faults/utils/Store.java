@@ -13,9 +13,8 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
-package gr.uop.intermittent.faults.utils;
-
+ */ 
+package gr.uop.intermittent.faults.utils; 
 
 /**
  *
@@ -32,10 +31,10 @@ public class Store {
         } else {
           //  Thread.sleep(10);
             CacheObject newMo = new CacheObject();
-            newMo.addCacheObjectValue(value);
+            newMo.addCacheObjectValue(value); 
             newMo.setName(name);
-            cacheInstance.addCacheObject(newMo);
-        }
+            cacheInstance.addCacheObject(newMo);  
+        } 
     }
 
 }
